@@ -20,11 +20,36 @@ function main(): number {
     } else if (button.id === "right") {
       tetris.moveRight(); // Call moveRight method
     } else if (button.id === "counter") {
-      tetris.rotateCCW(); // Call moveDown method (You might already be doing this in the game loop)
+      tetris.rotateCCW();
     } else if (button.id === "clock") {
-      tetris.rotateClock(); // Call rotate method if you have one
+      tetris.rotateClock();
+    } else if (button.id === "down") {
+      if (!tetris.collision(0, 1)) {
+        tetris.moveDown();
+      }
     }
   }
+
+  const downBtn = document.getElementById("down");
+
+  let holdInterval: any;
+
+  downBtn!.addEventListener("touchstart", () => {
+    // Start moving the piece down as long as the button is held
+    holdInterval = setInterval(() => {
+      if (!tetris.collision(0, 1)) {
+        tetris.moveDown();
+      }
+    }, 100); // Move down every 100ms while the button is held
+  });
+
+  downBtn!.addEventListener("touchend", () => {
+    clearInterval(holdInterval);
+  });
+
+  downBtn!.addEventListener("touchcancel", () => {
+    clearInterval(holdInterval);
+  });
 
   function randomColor() {
     let random = Math.floor(Math.random() * colors.length);
@@ -32,13 +57,13 @@ function main(): number {
   }
 
   const colors: string[] = [
-    "#04a5e5",
-    "#f9e2af",
-    "#eed49f",
-    "#a6da95",
-    "#e64553",
-    "#f38ba8",
-    "#f5e0dc"
+    "#00FFFF", // I - Cyan
+    "#FFFF00", // O - Yellow
+    "#800080", // T - Purple
+    "#00FF00", // S - Green
+    "#FF0000", // Z - Red
+    "#0000FF", // J - Blue
+    "#FFA500" // L - Orange
   ];
 
   let tetris = new Tetrimino(win, randomColor());

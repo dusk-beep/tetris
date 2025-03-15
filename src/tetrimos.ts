@@ -118,7 +118,6 @@ class Tetrimino {
   moveDown() {
     this.undraw();
     this.y++;
-    console.log(`Moving down to y: ${this.y}`);
     this.draw();
   }
 
