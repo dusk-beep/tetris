@@ -138,6 +138,28 @@ class Tetrimino {
         this.win.board[this.y + row][this.x + col] = this.color;
       }
     }
+
+    // check if row full
+    for (let row = 0; row < ROW; row++) {
+      let rowFull = true;
+      for (let col = 0; col < COL; col++) {
+        rowFull = rowFull && this.win.board[row][col] != EMPTY;
+      }
+
+      if (rowFull) {
+        for (let y = row; y > 1; y--) {
+          for (let c = 0; c < COL; c++) {
+            this.win.board[y][c] = this.win.board[y - 1][c];
+          }
+        }
+
+        for (let c = 0; c < COL; c++) {
+          this.win.board[0][c] = EMPTY;
+        }
+      }
+    }
+
+    this.win.drawBoard();
   }
 
   collision(x: number, y: number): boolean {

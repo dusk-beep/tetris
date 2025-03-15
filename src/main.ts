@@ -5,8 +5,6 @@ function main(): number {
   const win = new Windows();
   win.drawBoard();
 
-  let tetris = new Tetrimino(win, "white");
-
   const buttons: NodeListOf<HTMLButtonElement> =
     document.querySelectorAll("button");
 
@@ -34,20 +32,22 @@ function main(): number {
   }
 
   const colors: string[] = [
-    "dodgerblue",
-    "red",
-    "yellow",
-    "pink",
-    "violet",
-    "brown",
-    "lime"
+    "#04a5e5",
+    "#f9e2af",
+    "#eed49f",
+    "#a6da95",
+    "#e64553",
+    "#f38ba8",
+    "#f5e0dc"
   ];
+
+  let tetris = new Tetrimino(win, randomColor());
 
   let start = Date.now();
   function gameLoop() {
     let delta = Date.now() - start;
 
-    if (delta > 100) {
+    if (delta > 500) {
       // check if we can move down collison
       // y changes by 1
       if (!tetris.collision(0, 1)) {
