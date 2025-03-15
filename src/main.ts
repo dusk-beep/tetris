@@ -1,50 +1,37 @@
-const ROW: number = 20;
-const COL: number = 10;
-const EMPTY: string = "#89b4fa";
-const SQWIDTH: number = 20;
+import { Windows } from "./windows";
+import { Tetrimino } from "./tetrimos";
 
-class Windows {
-  canvas: HTMLCanvasElement | null;
-  ctx: CanvasRenderingContext2D | null;
-  width: number;
-  height: number;
+function main(): number {
+  const win = new Windows();
+  win.drawBoard();
 
-  board: string[][];
+  let tetris = new Tetrimino(win, "white");
 
-  constructor() {
-    this.canvas = document.querySelector(".cnv");
-    if (!this.canvas) {
-      throw Error("canvas not found");
-    }
-    this.ctx = this.canvas!.getContext("2d");
-    if (!this.ctx) {
-      throw new Error("Failed to get canvas context");
-    }
-    this.width = this.canvas!.width = 200; // COL * SQWIDTH
-    this.height = this.canvas!.height = 400; // ROW * SQWIDTH
-    this.board = new Array(ROW)
-      .fill(null)
-      .map(() => new Array(COL).fill(EMPTY));
-  }
+  let gameOver = false;
+  let start = Date.now();
+  function gameLoop() {
+    let delta = Date.now() - start;
 
-  drawSquare(x: number, y: number, color: string) {
-    this.ctx!.fillStyle = color;
-    this.ctx!.fillRect(x * SQWIDTH, y * SQWIDTH, SQWIDTH, SQWIDTH);
-
-    this.ctx!.strokeStyle = "#111111b";
-    this.ctx!.strokeRect(x * SQWIDTH, y * SQWIDTH, SQWIDTH, SQWIDTH);
-  }
-
-  drawBoard(): void {
-    for (let i = 0; i < ROW; i++) {
-      for (let j = 0; j < COL; j++) {
-        // x index then y index
-        // row then column
-        this.drawSquare(j, i, this.board[i][j]);
+    if (delta > 100) {
+      // check if we can move down collison
+      // y changes by 1
+      if (!tetris.collision(0, 1)) {
+        tetris.moveDown();
+        start = Date.now();
+      } else {
+        // else create a new Tetrimino
+        tetris.lock();
+        tetris = new Tetrimino(win, "black");
       }
     }
+
+    if (!gameOver) {
+      requestAnimationFrame(gameLoop);
+    }
   }
+  gameLoop();
+
+  return 0;
 }
 
-const win = new Windows();
-win.drawBoard();
+main();
