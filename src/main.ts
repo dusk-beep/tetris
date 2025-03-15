@@ -7,7 +7,20 @@ function main(): number {
 
   let tetris = new Tetrimino(win, "white");
 
-  let gameOver = false;
+  function randomColor() {
+    let random = Math.floor(Math.random() * colors.length);
+    return colors[random];
+  }
+  const colors: string[] = [
+    "dodgerblue",
+    "red",
+    "yellow",
+    "pink",
+    "violet",
+    "brown",
+    "lime"
+  ];
+
   let start = Date.now();
   function gameLoop() {
     let delta = Date.now() - start;
@@ -21,11 +34,11 @@ function main(): number {
       } else {
         // else create a new Tetrimino
         tetris.lock();
-        tetris = new Tetrimino(win, "black");
+        tetris = new Tetrimino(win, randomColor());
       }
     }
 
-    if (!gameOver) {
+    if (!tetris.gameOver) {
       requestAnimationFrame(gameLoop);
     }
   }

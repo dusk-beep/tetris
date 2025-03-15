@@ -10,12 +10,15 @@ class Tetrimino {
   x: number = 3;
   y: number = -2;
 
+  gameOver = false;
+
   constructor(win: Windows, color: string) {
     this.shape = this.getRandomShape();
     this.color = color;
     this.win = win;
   }
 
+  // clockwise
   rotate(): void {
     const n: number = this.shape.length;
     const newShape = Array.from({ length: n }, () => Array(n).fill(0));
@@ -46,7 +49,7 @@ class Tetrimino {
     for (let i = 0; i < this.shape.length; i++) {
       for (let j = 0; j < this.shape[0].length; j++) {
         if (this.shape[i][j]) {
-          this.win.drawSquare(this.x + i, this.y + j, color);
+          this.win.drawSquare(this.x + j, this.y + i, color);
         }
       }
     }
@@ -74,6 +77,12 @@ class Tetrimino {
           continue;
         }
 
+        if (this.y + col < 0) {
+          console.log("gameova");
+          this.gameOver = true;
+          break;
+        }
+
         this.win.board[this.y + row][this.x + col] = this.color;
       }
     }
@@ -91,6 +100,10 @@ class Tetrimino {
 
         if (newX < 0 || newX >= COL || newY >= ROW) {
           return true;
+        }
+
+        if (newY < 0) {
+          continue;
         }
 
         if (this.win.board[newY][newX] != EMPTY) {
