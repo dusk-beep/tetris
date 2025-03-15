@@ -19,7 +19,8 @@ class Tetrimino {
   }
 
   // clockwise
-  rotate(): void {
+  rotateClock(): void {
+    this.undraw();
     const n: number = this.shape.length;
     const newShape = Array.from({ length: n }, () => Array(n).fill(0));
 
@@ -36,7 +37,42 @@ class Tetrimino {
       }
     }
 
+    const orgShape = this.shape;
     this.shape = newShape;
+
+    if (this.collision(0, 0)) {
+      this.shape = orgShape;
+    }
+
+    this.draw();
+  }
+
+  rotateCCW(): void {
+    this.undraw();
+    const n: number = this.shape.length;
+    const newShape = Array.from({ length: n }, () => Array(n).fill(0));
+
+    /*
+     * _ _ _ 0
+     * _,_,_ 0
+     * _,_,_ 0
+     * _,_,_ 0
+     */
+
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        newShape[n - 1 - j][i] = this.shape[i][j];
+      }
+    }
+
+    const orgShape = this.shape;
+    this.shape = newShape;
+
+    if (this.collision(0, 0)) {
+      this.shape = orgShape;
+    }
+
+    this.draw();
   }
 
   getRandomShape(): number[][] {
@@ -61,6 +97,22 @@ class Tetrimino {
 
   draw() {
     this.fill(this.color);
+  }
+
+  moveLeft() {
+    if (!this.collision(-1, 0)) {
+      this.undraw();
+      this.x--;
+      this.draw();
+    }
+  }
+
+  moveRight() {
+    if (!this.collision(1, 0)) {
+      this.undraw();
+      this.x++;
+      this.draw();
+    }
   }
 
   moveDown() {
