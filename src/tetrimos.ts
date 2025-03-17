@@ -1,4 +1,4 @@
-import { T, I, S } from "./shapes";
+import { T, I, S, O, L, J } from "./shapes";
 import { Windows } from "./windows";
 
 import { EMPTY, ROW, COL } from "./constants";
@@ -76,7 +76,7 @@ class Tetrimino {
   }
 
   getRandomShape(): number[][] {
-    const shapes = [I, T, S];
+    const shapes = [I, T, S, O, L, J];
     const randomIndex = Math.floor(Math.random() * shapes.length);
     return shapes[randomIndex];
   }
